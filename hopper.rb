@@ -18,10 +18,9 @@ class Tracer
 
   def run
       dest_ip = IPSocket.getaddress(@destination)
-      
       puts "traceroute to #{@destination} (#{dest_ip}), #{@hops} hops max"
 
-      while true
+      while true && @ttl <= @hops
         sender = create_sender
         receiver = create_receiver
 
@@ -34,6 +33,8 @@ class Tracer
           Timeout.timeout(3) {    
             data, addr = receiver.recvfrom(1024)
             puts "#{@ttl} #{addr.ip_address}"
+
+            return if addr.ip_address == dest_ip
           }
         rescue Timeout::Error
           puts "#{@ttl} *"
@@ -63,6 +64,6 @@ class Tracer
   end
 end
 
-x = Tracer.new("www.shopify.com")
+x = Tracer.new("www.google.com")
 # byebug
 puts x.run
