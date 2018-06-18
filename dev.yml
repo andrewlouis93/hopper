@@ -1,0 +1,7 @@
+name: hopper
+
+# Define dependencies to run this service.
+up:
+  - ruby:
+      version: 2.4.1
+  - bundler
